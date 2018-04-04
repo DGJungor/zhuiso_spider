@@ -5,14 +5,16 @@ from Config.Config import RUNTIME_DIR
 
 sleepTime = 10
 slist = []
-#配置监测自启
+# 配置监测自启
 slist.append(dict(
-    key = 'bd',
-    #指定临时运行记录文件
-    fileName = RUNTIME_DIR+'bd_worker.txt',
-    #运行脚本
-    runFile = 'run.py',
+    key='qd',
+    # 指定临时运行记录文件
+    fileName=RUNTIME_DIR + 'qd_worker.txt',
+    # 运行脚本
+    runFile='./qidan/run.py',
 ))
+
+
 # slist.append(dict(
 #     key='fc',
 #     fileName=RUNTIME_DIR+'fc_worker.txt',
@@ -27,8 +29,6 @@ def main():
         workNum = {}
         lastNum = {}
         for sp in slist:
-            print(sp['key'] + 'Spider--运行--' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-            os.system("python " + sp['runFile'])
             if os.path.exists(sp['fileName']):
                 file = open(sp['fileName'], 'r')
                 workNum[sp['key']] = int(file.read())
@@ -45,8 +45,8 @@ def main():
             lastNum[sp['key']] = int(file.read())
             file.close()
             if lastNum[sp['key']] == workNum[sp['key']]:
-                print(sp['key']+'Spider--运行--' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-                os.system("python "+sp['runFile'])
+                print(sp['key'] + 'Spider--运行--' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
+                os.system("python " + sp['runFile'])
 
 
 if __name__ == '__main__':

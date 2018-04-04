@@ -1,17 +1,25 @@
+# -*- coding: utf-8 -*-
+
 import re
 import os
 import scrapy
 import redis
 import requests
 import hashlib
-import urllib.parse
+import sys
+
+if sys.version_info.major == 3:
+    from urllib import parse as parseUrl
+else:
+    import urlparse as parseUrl
 from Common.Db import Db
 from scrapy import Selector
 from scrapy_redis.spiders import Spider
 from Config.DataBaseConfig import REDIS_CONFIG
 from Config.Config import RUNTIME_DIR
 
-# Master爬虫(可负制项目,开启多个运行)   爬取小说百度搜索结果爬虫 用于生产待采集requests_url
+
+# Master爬虫(可负制项目,开启多个运行)爬取小说百度搜索结果爬虫 用于生产待采集requests_url
 class BdSpider(Spider):
     name = 'bdSpider'
     allowed_domains = ['baidu.com']
@@ -60,8 +68,8 @@ class BdSpider(Spider):
                     self.curr_url['curr_domain'].append(mirr['m_domain'])
                     #使用百度高级查询生成搜索词: (site:搜索域名) intitle: 小说名称 (从指定搜索域名的搜索结果中精确搜索xxx)
                     self.start_urls.append(
-                        'https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&tn=baidu&wd=(site:' + mirr[
-                            'm_domain'] + ')' + ' intitle:' +row['b_name'])
+                        'https://www.baidu.com/s?ie=utf-8&rn=50&f=8&rsv_bp=1&tn=baidu&wd=(site:' + mirr[
+                            'm_domain'] + ')' + ' intitle:' + row['b_name'])
 
     #生成初始requests请求
     def start_requests(self):
@@ -94,7 +102,7 @@ class BdSpider(Spider):
             # 将搜索结果中的百度加密链接转换为真实网站链接地址
             realUrl = self.get_bd_realyUrl(links['url'])
             # 获取真实链接的scheme
-            scheme = (urllib.parse.urlparse(realUrl)).scheme
+            scheme = (parseUrl.urlparse(realUrl)).scheme
             # 获取真实网站地址中的域名
             domain = self.extractDomainFromURL(realUrl)
             # #从数据库根据得出的域名获取是否有对应的网页提取规则 没有则跳过
@@ -148,7 +156,7 @@ class BdSpider(Spider):
     # 获取网站地址中的域名
     def extractDomainFromURL(self, url):
         """Get domain name from url"""
-        parsed_uri = urllib.parse.urlparse(url)
+        parsed_uri = parseUrl.urlparse(url)
         domain = '{uri.netloc}'.format(uri=parsed_uri)
         return domain
 

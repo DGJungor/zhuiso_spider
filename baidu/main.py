@@ -5,17 +5,19 @@ from Config.Config import RUNTIME_DIR
 
 sleepTime = 10
 slist = []
+#配置监测自启
 slist.append(dict(
-    key = 'fc',
-    fileName = RUNTIME_DIR+'fc_worker.txt',
-    runFile = 'run.py',
+    key = 'bd',
+    #指定临时运行记录文件
+    fileName = RUNTIME_DIR+'bd_worker.txt',
+    #运行脚本
+    runFile = './baidu/run.py',
 ))
 # slist.append(dict(
 #     key='fc',
 #     fileName=RUNTIME_DIR+'fc_worker.txt',
 #     runFile='runFc.py',
 # ))
-
 
 def main():
     for sp in slist:

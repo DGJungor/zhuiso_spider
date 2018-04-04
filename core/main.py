@@ -5,26 +5,24 @@ from Config.Config import RUNTIME_DIR
 
 sleepTime = 10
 slist = []
-# 配置监测自启
 slist.append(dict(
-    key='qd',
-    # 指定临时运行记录文件
-    fileName=RUNTIME_DIR + 'qd_worker.txt',
-    # 运行脚本
-    runFile='run.py',
+    key='core',
+    fileName=RUNTIME_DIR + 'core_worker.txt',
+    runFile='./core/run.py',
 ))
-
-
 # slist.append(dict(
 #     key='fc',
 #     fileName=RUNTIME_DIR+'fc_worker.txt',
 #     runFile='runFc.py',
 # ))
 
+print(os.getcwd())
+
+
 def main():
     for sp in slist:
         print(sp['key'] + 'Spider--运行--' + time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time())))
-        os.system("python " + sp['runFile'])
+        os.system("python " + sp['runFile'] + ' ' + os.getcwd())
     while True:
         workNum = {}
         lastNum = {}
